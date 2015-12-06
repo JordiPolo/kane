@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require 'json'
+require "kane"
+
+puts "getting repositories"
+
+repos = Kane::OrganizationRepositories.all
+
+data = repos.map do |repo|
+  puts "Getting project #{repo.project.name}"
+  hash_data = {name: repo.project.name, language: repo.project.language, rails: repo.uses_rails?, gems: repo.gems}
+  puts hash_data
+  hash_data
+end
+
+File.open("data.json","w") do |f|
+  f.write(data.to_json)
+end
